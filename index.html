@@ -1,0 +1,690 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"> <!-- utf-8 works for most cases -->
+    <meta name="viewport" content="width=device-width"> <!-- Forcing initial-scale shouldn't be necessary -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- Use the latest (edge) version of IE rendering engine -->
+    <meta name="x-apple-disable-message-reformatting">  <!-- Disable auto-scale in iOS 10 Mail entirely -->
+    <title></title> <!-- The title tag shows in email notifications, like Android 4.4. -->
+
+    <!-- Web Font / @font-face : BEGIN -->
+    <!-- NOTE: If web fonts are not required, lines 9 - 26 can be safely removed. -->
+    
+    <!-- Desktop Outlook chokes on web font references and defaults to Times New Roman, so we force a safe fallback font. -->
+    <!--[if mso]>
+        <style>
+            * {
+                font-family: sans-serif !important;
+            }
+        </style>
+    <![endif]-->
+    
+    <!-- All other clients get the webfont reference; some will render the font and others will silently fail to the fallbacks. More on that here: http://stylecampaign.com/blog/2015/02/webfont-support-in-email/ -->
+    <!--[if !mso]><!-->
+        <!-- insert web font reference, eg: <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'> -->
+    <!--<![endif]-->
+
+    <!-- Web Font / @font-face : END -->
+    
+    <!-- CSS Reset -->
+    <style>
+
+        /* What it does: Remove spaces around the email design added by some email clients. */
+        /* Beware: It can remove the padding / margin and add a background color to the compose a reply window. */
+        html,
+        body {
+            margin: 0 auto !important;
+            padding: 0 !important;
+            height: 100% !important;
+            width: 100% !important;
+        }
+        
+        /* What it does: Stops email clients resizing small text. */
+        * {
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
+        
+        /* What it does: Centers email on Android 4.4 */
+        div[style*="margin: 16px 0"] {
+            margin:0 !important;
+        }
+        
+        /* What it does: Stops Outlook from adding extra spacing to tables. */
+        table,
+        td {
+            mso-table-lspace: 0pt !important;
+            mso-table-rspace: 0pt !important;
+        }
+                
+        /* What it does: Fixes webkit padding issue. Fix for Yahoo mail table alignment bug. Applies table-layout to the first 2 tables then removes for anything nested deeper. */
+        table {
+            border-spacing: 0 !important;
+            border-collapse: collapse !important;
+            table-layout: fixed !important;
+            margin: 0 auto !important;
+        }
+        table table table {
+            table-layout: auto; 
+        }
+        
+        /* What it does: Uses a better rendering method when resizing images in IE. */
+        img {
+            -ms-interpolation-mode:bicubic;
+        }
+        
+        /* What it does: A work-around for iOS meddling in triggered links. */
+        .mobile-link--footer a,
+        a[x-apple-data-detectors] {
+            color:inherit !important;
+            text-decoration: underline !important;
+        }
+      
+    </style>
+    
+    <!-- Progressive Enhancements -->
+    <style>
+        
+        /* What it does: Hover styles for buttons */
+        .button-td,
+        .button-a {
+            transition: all 100ms ease-in;
+        }
+        .button-td:hover,
+        .button-a:hover {
+            background: #404040 !important;
+            border-color: #404040 !important;
+        }
+
+        /* Media Queries */
+        @media screen and (max-width: 480px) {
+
+            /* What it does: Forces elements to resize to the full width of their container. Useful for resizing images beyond their max-width. */
+            .fluid,
+            .fluid-centered {
+                width: 100% !important;
+                max-width: 100% !important;
+                height: auto !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+            /* And center justify these ones. */
+            .fluid-centered {
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+
+            /* What it does: Forces table cells into full-width rows. */
+            .stack-column,
+            .stack-column-center {
+                display: block !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                direction: ltr !important;
+            }
+            /* And center justify these ones. */
+            .stack-column-center {
+                text-align: center !important;
+            }
+        
+            /* What it does: Generic utility class for centering. Useful for images, buttons, and nested tables. */
+            .left-on-narrow {
+                text-align: center !important;
+                display: block !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+                float: none !important;
+            }
+            table.left-on-narrow {
+                display: inline-block !important;
+            }
+                
+        }
+}
+    </style>
+
+</head>
+<body width="100%" bgcolor="#222222" style="margin: 0;">
+    <center style="width: 100%; background: #222222;">
+
+        <!-- Visually Hidden Preheader Text : BEGIN -->
+        <div style="display:none;font-size:1px;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;mso-hide:all;font-family: sans-serif;">
+            (Optional) This text will appear in the inbox preview, but not the email body.
+        </div>
+        <!-- Visually Hidden Preheader Text : END -->
+
+        <!--    
+            Set the email width. Defined in two places:
+            1. max-width for all clients except Desktop Windows Outlook, allowing the email to squish on narrow but never go wider than 680px.
+            2. MSO tags for Desktop Windows Outlook enforce a 680px width.
+            Note: The Fluid and Responsive templates have a different width (600px). The hybrid grid is more "fragile", and I've found that 680px is a good width. Change with caution.  
+        -->
+        <div style="max-width: 680px; margin: auto;">
+            <!--[if mso]>
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="680" align="center">
+            <tr>
+            <td>
+            <![endif]-->
+
+            <!-- Email Header : BEGIN -->
+          <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 680px;">
+                <tr>
+                    <td style="padding: 20px 0; text-align: center">
+                    </td>
+                </tr>
+            </table>
+            <!-- Email Header : END -->
+            
+            <!-- Email Body : BEGIN -->
+          <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 680px;">
+                
+                <!-- Hero Image, Flush : BEGIN -->
+                <tr>
+                    <td bgcolor="#ffffff">
+                      <img src="International-Banner-Newletter-01.png" width="680" height="291" alt="alt_text" border="0" align="center" class="fluid" style="width: 100%; max-width: 680px; background: #dddddd; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #404040;">
+                    </td>
+                </tr>
+                <!-- Hero Image, Flush : END -->
+                <!-- 2 Even Columns : BEGIN -->
+                <tr>
+                    <td bgcolor="#ffffff" align="center" height="100%" valign="top" width="100%">
+                    </td>
+                </tr>
+                <!-- 2 Even Columns : END -->
+
+         
+                
+                <!-- Thumbnail Left, Text Right : BEGIN -->
+                <tr>
+                    <!-- dir=ltr is where the magic happens. This can be changed to dir=rtl to swap the alignment on wide while maintaining stack order on narrow. -->
+                    <td dir="ltr" bgcolor="#ffffff" align="center" height="100%" valign="top" width="100%" style="padding: 10px 0; background-color: #ECECEC;">
+                        <!--[if mso]>
+                        <table role="presentation" border="0" cellspacing="0" cellpadding="0" align="center" width="660">
+                        <tr>
+                        <td align="center" valign="top" width="660">
+                        <![endif]-->
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" width="100%" style="max-width:660px;">
+                            <tr>
+                                <td align="center" valign="top" style="font-size:0; padding: 10px 0;">
+                                    <!--[if mso]>
+                                    <table role="presentation" border="0" cellspacing="0" cellpadding="0" align="center" width="660">
+                                    <tr>
+                                    <td align="left" valign="top" width="220">
+                                    <![endif]-->
+                                    <div style="display:inline-block; margin: 0 -2px; max-width: 200px; min-width:160px; vertical-align:top; width:100%;" class="stack-column">
+                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                            <tr>
+                                                <td dir="ltr" style="padding: 0 10px 10px 10px;">
+                                                    <img src="chadni.png" alt="alt_text" width="200" class="left-on-narrow" style="width: 100%;max-width: 200px; background: #dddddd; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #404040;" border="0">
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <!--[if mso]>
+                                    </td>
+                                    <td align="left" valign="top" width="440">
+                                    <![endif]-->
+                                    <div style="display:inline-block; margin: 0 -2px; max-width:66.66%; min-width:320px; vertical-align:top;" class="stack-column">
+                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                            <tr>
+                                                <td dir="ltr" style="font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #404040; padding: 10px 10px 0; text-align: left;" >
+                                                 <span style="font-size: 20px;">Director’s Message</span>
+													<p>Fall semester was a great success! We had over 100 alumni join us in celebrating the 70th anniversary of the International House and a standing-room-only crowd at the UN Day Tea. Our students were thrilled to receive so much support from their predecessors, and we hope you enjoyed meeting and spending time with them as well.</p>
+
+													<p>We also had 15 students make the President’s and Dean’s Lists and an average GPA of 3.09 for the International House students. We’re very proud of all our students for working hard to achieve their academic goals while also representing their home countries and the International House at various events.</p>
+
+													<p>This spring, we’re looking forward to more opportunities to serve the community and spread cultural awareness, especially at the Girl Scout’s World Thinking Day in February and the Taster’s Fair, which will be April 8 and is open to the public. We hope you’ll follow us on <a href="https://www.facebook.com/jsuinternationalhouse/" target="new"> Facebook </a>and join us for any public events you’re able to attend. We hope to hear from you or see you at events in the future.</p>
+
+													<p>Thank you,</p>
+                                                    <!-- Button : Begin -->
+                                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0"  style="float:left;">
+                                                        <tr>
+                                                            <td>
+                                   <img src="sign-1.png" alt="alt_text" width="228" height="49" class="" style="width: 100%; max-width: 200px; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #404040;" border="0">
+                                   <p>Chandni Khadka<br />
+                                     Director, International House &amp; Programs</p>
+                                                                          </td>
+                                                        </tr>
+                                                    </table>
+                                                    <!-- Button : END -->
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <!--[if mso]>
+                                    </td>
+                                    </tr>
+                                    </table>
+                                    <![endif]-->
+                                </td>
+                            </tr>
+                        </table>
+                  <hr />
+                        <!--[if mso]>
+                        </td>
+                        </tr>
+                        </table>
+                        <![endif]-->
+                    </td>
+                </tr>
+                <!-- Thumbnail Left, Text Right : END -->
+                <!-- Thumbnail Right, Text Left : BEGIN -->
+                <tr>
+                    <!-- dir=rtl is where the magic happens. This can be changed to dir=ltr to swap the alignment on wide while maintaining stack order on narrow. -->
+                    <td dir="rtl" bgcolor="#ffffff" align="center" height="100%" valign="top" width="100%" style="padding: 10px 0; background-color: #ECECEC;">
+                        <!--[if mso]>
+                        <table role="presentation" border="0" cellspacing="0" cellpadding="0" align="center" width="660">
+                        <tr>
+                        <td align="center" valign="top" width="660">
+                        <![endif]-->
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" width="100%" style="max-width:660px;">
+                            <tr>
+                                <td align="center" valign="top" style="font-size:0; padding: 10px 0;">
+                                    <!--[if mso]>
+                                    <table role="presentation" border="0" cellspacing="0" cellpadding="0" align="center" width="660">
+                                    <tr>
+                                    <td align="left" valign="top" width="220">
+                                    <![endif]-->
+                                    <div style="display:inline-block; margin: 0 -2px; max-width: 200px; min-width:160px; vertical-align:top; width:100%;" class="stack-column">
+                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                            <tr>
+                                                <td dir="ltr" style="padding: 0 10px 10px 10px;">
+                                                    <img src="clarence.png" alt="alt_text" width="185" class="left-on-narrow" style="width: 100%;max-width: 200px;  background: #dddddd; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #404040; " border="0">
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <!--[if mso]>
+                                    </td>
+                                    <td align="left" valign="top" width="440">
+                                    <![endif]-->
+                                    <div style="display:inline-block; margin: 0 -2px; max-width:66.66%; min-width:320px; vertical-align:top;" class="stack-column">
+                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                            <tr>
+                                                <td dir="ltr" style="font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #404040; padding: 10px 10px 0; text-align: left;" ><span style="font-size:20px; line-height:1.5em;">Joe Serviss</span>
+												<p>Secretary/Treasurer of the International Endowment Foundation, Inc.</p>
+                                                <p>As a student at JSU in 1964, I had a few classes with international students, but I wasn’t really involved with the International House. After I retired from the army in 1989, I returned to JSU and in 1991, my son joined the International House as a freshman. As the vice president of institutional advancement, I was lucky enough to attend the 60th anniversary reunion in Paris, France and reacquaint myself with old friends and make new ones as well. In 2009, I retired from the university, and I was invited to serve on the International Endowment Foundation Board. I’ve had a long and varied history with the International House, and I hope to see it continue for at least another 70 years. It has been a unique program for JSU, the community, the state, and the country for a long time, and I hope its traditions and ideals will continue to have a positive effect on our campus and the world for a long time to come. </p> 
+												<p>The alumni who have shaped and benefitted from this excellent program are important to the university and to the International Program, and I hope they have memories of us that are as fond as our memories of them. I hope they are inspired by their experiences to contribute to the continuation of the International House. Financial support for the program is more important today than it has been in the past. We’re going to need everyone to contribute so we can continue the program for future students. Please send donations through the online method or send checks payable to Jones International House Program c/o Jacksonville State University 700 Pelham Road North Jacksonville, AL 36265.
+                                                <a href="https://web4046.campusnet.net/onlinegiving_421/site/donate.aspx?siteid=42f05df3-f387-4392-874c-d8f4a074075d&fgid=1110" title="Donate to The international House" target="new">To make your gift online please follow the link to our secure on-line giving page.</a></p>
+<!-- Button : Begin -->
+                                                <table role="presentation" cellspacing="0" cellpadding="0" border="0"  style="float:left;">
+                                                <td>
+                                                   <!-- Signature Missing 
+                                                   <img src="sign-2.png" alt="alt_text" width="228" height="49" class="" style="width: 100%;max-width: 200px; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #404040;" border="0">
+                                                   -->
+											<p>Thank you,<br />Joe Serviss<br />Secretary/Treasurer<br />International Endowment Foundation, Inc.<br /></p>
+							</td>
+                                                    </table>
+                                                    <!-- Button : END -->
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <!--[if mso]>
+                                    </td>
+                                    </tr>
+                                    </table>
+                                    <![endif]-->
+                                </td>
+                            </tr>
+                        </table>
+                        <!--[if mso]>
+                        </td>
+                        </tr>
+                        </table>
+                        <![endif]-->
+                    </td>
+                </tr>
+                <!-- Thumbnail Right, Text Left : END -->
+
+    <!-- Background Image with Text : BEGIN -->
+                
+                  <tr>
+                    <td bgcolor="#ffffff">
+                      <img src="Banner01.jpg" alt="Faces of International House Banner" width="680" height="230" class="fluid" style="width: 100%; max-width: 680px; background: #dddddd; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #404040;" title="Faces of International House" border="0" align="center">
+                    </td>
+                </tr>
+                
+                
+                <!-- Background Image with Text : END -->
+
+            <!-- Clear Spacer : BEGIN 
+                <tr>
+                    <td height="40" style="font-size: 0; line-height: 0;">&nbsp;
+                        
+                  </td>
+                </tr>
+                <!-- Clear Spacer : END -->
+<!-- Firs testimonial -->
+<tr>
+                    <!-- dir=ltr is where the magic happens. This can be changed to dir=rtl to swap the alignment on wide while maintaining stack order on narrow. -->
+                    <td dir="ltr" bgcolor="#ffffff" align="center" height="100%" valign="top" width="100%" style="padding: 10px 0; background-color: #ECECEC;">
+                        <!--[if mso]>
+                        <table role="presentation" border="0" cellspacing="0" cellpadding="0" align="center" width="660">
+                        <tr>
+                        <td align="center" valign="top" width="660">
+                        <![endif]-->
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" width="100%" style="max-width:660px;">
+                            <tr>
+                                <td align="center" valign="top" style="font-size:0; padding: 10px 0;">
+                                    <!--[if mso]>
+                                    <table role="presentation" border="0" cellspacing="0" cellpadding="0" align="center" width="660">
+                                    <tr>
+                                    <td align="left" valign="top" width="220">
+                                    <![endif]-->
+                                    <div style="display:inline-block; margin: 0 -2px; max-width: 200px; min-width:160px; vertical-align:top; width:100%;" class="stack-column">
+                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                            <tr>
+                                                <td dir="ltr" style="padding: 0 10px 10px 10px;">
+                                                    <img src="student01.jpg" alt="alt_text" width="200" class="left-on-narrow" style="width: 100%;max-width: 200px; background: #dddddd; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #404040;" border="0">
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <!--[if mso]>
+                                    </td>
+                                    <td align="left" valign="top" width="440">
+                                    <![endif]-->
+                                    <div style="display:inline-block; margin: 0 -2px; max-width:66.66%; min-width:320px; vertical-align:top;" class="stack-column">
+                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                            <tr>
+												<td dir="ltr" style="font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #404040; padding: 10px 10px 0; text-align: left;" ><span style="font-size: 20px;">Vasila Nuralieva</span> <p>Tajikistan</p>
+													<p><strong>How did you find out about the International House?</strong>I heard about the International House last year from my Polish host Dad. He used to live in the house back in 2000. This program is unknown in my home country, and it was the first time I heard about it. He is the one who encouraged me with his stories and his life at JSU. I am so lucky because who knew that I will meet a person far from my home country who will encourage me to apply to the House.</p>
+													<p><strong>What is your favorite thing about the House?</strong>The House is different from other dormitories; this makes it special. The diversity makes it unique. Every resident is so different, with diverse backgrounds and cultures; it makes us special and it unites us. I would never think before that I would meet so many people from South America or Africa. That part of the world was unattainable for me. Now, I can say for sure that someday I will visit these countries, and I will be glad to have a reunion with all the House members. Moreover, I like the idea of sharing a room with an American. It helps me to adapt more easily as my roommate is always the one who gives me her hand. That’s what I appreciate most.</p>
+													<p><strong>What would you like to say to people from the campus or community about the House?</strong>
+													If someone wants to widen their outlook, the House is the best place. It shows all the beauty of the world. I have been in many diverse societies, but the House is more than a diverse society. The knowledge and experience that you get in the House is priceless. Most likely, I would repeat my favorite things about the house, which I have mentioned above.</p> 
+                                           			<p><strong>What would you like to say to alumni of the House?</strong>
+                                           			First, I want to thank my host Dad, as he is the one who informed me about the program and encouraged me to apply. Afterward, I want to thank every single alumni of the House for their support, for keeping the House traditions.</p></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <!--[if mso]>
+                                    </td>
+                                    </tr>
+                                    </table>
+                                    <![endif]-->
+                                </td>
+                            </tr>
+                        </table>
+                        <!--[if mso]>
+                        </td>
+                        </tr>
+                        </table>
+                        <![endif]-->
+                    </td>
+                </tr>
+<!-- End of testimonial -->
+                <!-- 1 Column Text + Button : BEGIN -->
+              <tr>
+              
+                    <!-- dir=rtl is where the magic happens. This can be changed to dir=ltr to swap the alignment on wide while maintaining stack order on narrow. -->
+                    <td dir="rtl" bgcolor="#ffffff" align="center" height="100%" valign="top" width="100%" style="padding: 10px 0;background-color: #ECECEC;">
+                        <!--[if mso]>
+                        <table role="presentation" border="0" cellspacing="0" cellpadding="0" align="center" width="660">
+                        <tr>
+                        <td align="center" valign="top" width="660">
+                        <![endif]-->
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" width="100%" style="max-width:660px;">
+                            <tr>
+                                <td align="center" valign="top" style="font-size:0; padding: 10px 0;">
+                                    <!--[if mso]>
+                                    <table role="presentation" border="0" cellspacing="0" cellpadding="0" align="center" width="660">
+                                    <tr>
+                                    <td align="left" valign="top" width="220">
+                                    <![endif]-->
+                                    <div style="display:inline-block; margin: 0 -2px; max-width: 200px; min-width:160px; vertical-align:top; width:100%;" class="stack-column">
+                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                            <tr>
+                                                <td dir="ltr" style="padding: 0 10px 10px 10px;">
+                                                    <img src="student02.jpg" width="200" border="0" alt="alt_text" class="left-on-narrow" style="width: 100%; max-width: 200px; background: #dddddd; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #404040;">
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <!--[if mso]>
+                                    </td>
+                                    <td align="left" valign="top" width="440">
+                                    <![endif]-->
+                                    <div style="display:inline-block; margin: 0 -2px; max-width:66.66%; min-width:320px; vertical-align:top;" class="stack-column">
+                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                            <tr>
+												<td dir="ltr" style="font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #404040; padding: 10px 10px 0; text-align: left;" ><span style="font-size: 20px;">Mason Battles</span><p> Hokes Bluff, Alabama</p>
+													<p><strong>How did you find out about the International House?</strong> As a freshman, I walked across campus in front of the International House just as most students did. After the first month of classes, curiosity got the best of me and I walked in. I climbed up the stairs and asked “what is the International House?" I was directed to the house coordinator at that time, Mrs. Ena Aguilar. She explained to me that the International House was a place for a globalized cultural exchange, gave me a DVD about the history, and invited me to the U.N. Day Tea. </p>
+													<p><strong>What is your favorite thing about the International House?</strong> My favorite thing about the International House is the people. This program brings a type of person that the university setting needs: open-minded, creative, and willing to learn. An old newspaper hangs framed on our basement wall. The article is an interview very similar to this one. When asked this question, the American student says "The people made me stay." I think my answer is pretty close to that too. </p>
+													<p><strong>What would you like to say about the Internaional House to JSU campus/community?</strong> I would like people to know that the International House isn't a secluded place. We do have times where we focus on growing together and moving forward, but that doesn't have to be an isolated thing. The International House is simply a host or home-base to the start of Jacksonville's global community. </p>
+													<p><strong>What would you like to say to the alumni?</strong> To alumni I say thank you. Your contributions and support to the university and to the Jones International House Program are greatly appreciated. For a program to last for over 70 years is a huge accomplishment. Our past has been built on people who believed in this program. Our future is in the hands of those who still do. I only hope the future can be handled with delicate hands and that the International House can be a global beacon of opportunity in our very own gem of the hills.</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <!--[if mso]>
+                                    </td>
+                                    </tr>
+                                    </table>
+                                    <![endif]-->
+                                </td>
+                            </tr>
+                        </table>
+                        <!--[if mso]>
+                        </td>
+                        </tr>
+                        </table>
+                        <![endif]-->
+                    </td>
+                </tr>
+                <!-- 1 Column Text + Button : BEGIN -->
+                <!-- Youtube Video -->
+                <tr>
+                    <!-- dir=ltr is where the magic happens. This can be changed to dir=rtl to swap the alignment on wide while maintaining stack order on narrow. -->
+                    <td dir="ltr" bgcolor="#ffffff" align="center" height="100%" valign="top" width="100%" style="padding: 10px 0; background-color: #ECECEC;">
+                        <!--[if mso]>
+                        <table role="presentation" border="0" cellspacing="0" cellpadding="0" align="center" width="660">
+                        <tr>
+                        <td align="center" valign="top" width="660">
+                        <![endif]-->
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" width="100%" style="max-width:660px;">
+                            <tr>
+                                <td align="center" valign="top" style="font-size:0; padding: 10px 0;">
+                                    <!--[if mso]>
+                                    <table role="presentation" border="0" cellspacing="0" cellpadding="0" align="center" width="660">
+                                    <tr>
+                                    <td align="left" valign="top" width="220">
+                                    <![endif]-->
+                                    <div style="display:inline-block; margin: 0 -2px; max-width: 200px; min-width:160px; vertical-align:top; width:100%;" class="stack-column">
+                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                            <tr>
+                                                <td dir="ltr" style="padding: 0 10px 10px 10px;"><a href="https://youtu.be/B0rxcMWqGOg" title="Video International House" target="new"><img src="Video-play.jpg" alt="alt_text" width="200" height="100" class="left-on-narrow" style="width: 100%;max-width: 200px;height: ; background: #dddddd; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #404040;" border="0"></a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <!--[if mso]>
+                                    </td>
+                                    <td align="left" valign="top" width="440">
+                                    <![endif]-->
+                                    <div style="display:inline-block; margin: 0 -2px; max-width:50%; min-width:320px; vertical-align:top;" class="stack-column">
+                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                            <tr>
+                                                <td dir="ltr" style="font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 35px; color: #404040; padding: 10px 10px 0; text-align: left;" ><span style="font-size: 20px;"><a href="https://youtu.be/B0rxcMWqGOg" title="International House Video" target="new">Learn and watch more about the faces from the International House</a></span>
+                                          </td></tr></table>
+                                    </div>
+                                    <!--[if mso]>
+                                    </td>
+                                    </tr>
+                                    </table>
+                                    <![endif]-->
+                                </td>
+                            </tr>
+                        </table>
+                        <!--[if mso]>
+                        </td>
+                        </tr>
+                        </table>
+                        <![endif]-->
+                    </td>
+                </tr>
+                <!-- End of Youtube -->
+                
+<!-- Background Image with Text : BEGIN -->
+                
+                  <tr>
+                    <td bgcolor="#ffffff">
+                      <img src="Banner02.jpg" alt="Country Spotlight Banner" width="680" height="230" class="fluid" style="width: 100%; max-width: 680px; background: #dddddd; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #404040;" title="County Spotlight" border="0" align="center">
+                    </td>
+                </tr>
+                
+                
+                <!-- Background Image with Text : END -->
+                      <!-- 1 Column Text + Button : BEGIN -->
+                <tr>
+                    <td style="background-color: #ECECEC;">
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                            <tr>
+                              <td style="padding: 40px; text-align: center; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #404040;">
+                                <span style="font-size: 20px;">Iceland</span>
+                                <p><strong>Currency</strong>:1 US Dollar = 113.72 Icelandic Króna<br />
+                                  <strong>Population</strong>: 332,550 (estimate)<br /><br />
+                                  <strong>Interesting Facts</strong><br /> <ul style="text-align: left;">
+                                    <li>Iceland has the highest number of bookstores per capita in the world.</li>
+                                    <li>The Icelandic language remains unchanged from ancient Norse.</li>
+                                    <li> In 930 A.D., the Alþingi – the National Assembly or Commonwealth – was founded and a common law established. It is the oldest parliament in the world. </li>
+                                    <li>Iceland had the first democratically elected female and openly gay Prime Ministers. </li>
+								  <li>There are no forests or mosquitos in Iceland.</li>
+                                  </ul>
+                                  </p>
+                              </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <!-- 1 Column Text + Button : BEGIN -->
+                <tr>
+                    <td bgcolor="#ffffff" align="center" height="100%" valign="top" width="100%" style="padding: 10px 0; background-color: #ECECEC;">
+                        <!--[if mso]>
+                        <table role="presentation" border="0" cellspacing="0" cellpadding="0" align="center" width="660">
+                        <tr>
+                        <td align="center" valign="top" width="660">
+                        <![endif]-->
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" width="100%" style="max-width:660px;">
+                            <tr>
+                                <td align="center" valign="top" style="font-size:0;">
+                                    <!--[if mso]>
+                                    <table role="presentation" border="0" cellspacing="0" cellpadding="0" align="center" width="660">
+                                    <tr>
+                                    <td align="left" valign="top" width="220">
+                                    <![endif]-->
+                                    <div style="display:inline-block; margin: 0 -2px; max-width:33.33%; min-width:220px; vertical-align:top; width:100%;" class="stack-column">
+                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                            <tr>
+                                                <td style="padding: 10px 10px;">
+                                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="font-size: 14px;text-align: left;">
+                                                        <tr>
+                                                            <td>
+                                                                <img src="country01.png" width="200" height="200" border="0" alt="alt_text" class="left-on-narrow" style="width: 100%;max-width: 200px; background: #dddddd; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #404040;">
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #404040; padding-top: 10px;" class="stack-column-center">
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <!--[if mso]>
+                                    </td>
+                                    <td align="left" valign="top" width="220">
+                                    <![endif]-->
+                                    <div style="display:inline-block; margin: 0 -2px; max-width:33.33%; min-width:220px; vertical-align:top; width:100%;" class="stack-column">
+                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                            <tr>
+                                                <td style="padding: 10px 10px;">
+                                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="font-size: 14px;text-align: left;">
+                                                        <tr>
+                                                            <td>
+                                                                <img src="country02.png" width="200" height="200" border="0" alt="alt_text" class="left-on-narrow" style="width: 100%;max-width: 200px; background: #dddddd; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #404040;">
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #404040; padding-top: 10px;" class="stack-column-center">
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <!--[if mso]>
+                                    </td>
+                                    <td align="left" valign="top" width="220">
+                                    <![endif]-->
+                                    <div style="display:inline-block; margin: 0 -2px; max-width:33.33%; min-width:220px; vertical-align:top; width:100%;" class="stack-column">
+                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                            <tr>
+                                                <td style="padding: 10px 10px;">
+                                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="font-size: 14px;text-align: left;">
+                                                        <tr>
+                                                            <td>
+                                                                <img src="country03.png" width="200" height="200" border="0" alt="alt_text" class="left-on-narrow" style="width: 100%;max-width: 200px; background: #dddddd; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #404040;">
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #404040; padding-top: 10px;" class="stack-column-center">
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <!--[if mso]>
+                                    </td>
+                                    </tr>
+                                    </table>
+                                    <![endif]-->
+                                </td>
+                            </tr>
+                        </table>
+                        <!--[if mso]>
+                        </td>
+                        </tr>
+                        </table>
+                        <![endif]-->
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td bgcolor="#ffffff"><a href="https://web4046.campusnet.net/onlinegiving_421/site/donate.aspx?siteid=42f05df3-f387-4392-874c-d8f4a074075d&fgid=1110"><img src="Banner03.jpg" alt="Click here to Donate Now Banner" width="680" height="230" class="fluid" style="width: 100%; max-width: 680px; background: #dddddd; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #404040;" title="Banner to Donate" border="0" align="center"></a>
+                  </td>
+                </tr>
+            </table>
+            <!-- Email Body : END -->
+          
+          
+            <!-- Email Footer : BEGIN -->
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 680px;">
+                <tr>
+                    <td style="padding: 40px 10px;width: 100%;font-size: 12px; font-family: sans-serif; mso-height-rule: exactly; line-height:18px; text-align: center; color: #888888;">
+                        <webversion style="color:#cccccc; text-decoration:underline; font-weight: bold;"><a href="http://www.jsu.edu/" title="Go To Home Page"><span style="color: #FFFFFF">Visit Jacksonville State University Home Page</span></a></webversion>
+                        <br><br>International House & Programs
+<br><span class="mobile-link--footer">700 Pelham Road North<br>Jacksonville, AL 36265</span><br><span class="mobile-link--footer">256-782-5303</span>
+<br />
+<br />
+<!--
+                        <unsubscribe style="color:#888888; text-decoration:underline;">unsubscribe</unsubscribe>
+                                    -->          
+                    </td>
+                </tr>
+          </table>
+            <!-- Email Footer : END -->
+
+            <!--[if mso]>
+            </td>
+            </tr>
+            </table>
+            <![endif]-->
+        </div>
+    </center>
+</body>
+</html>
